@@ -62,3 +62,24 @@ class UnofficialAPI(BaseAPI):
             )
 
         return dividends
+
+    def get_year_highs_and_lows(self):
+        """
+        Fetches highs and lows for each year - maximum 7 years back.
+
+        Each year has following fields:
+
+        * year
+        * high
+        * low
+
+        :return: List of years with the data.
+        :rtype: list
+        """
+
+        response = self._get(
+            f"https://www.tipranks.com/api/stocks/getChartPageData/?ticker={self.symbol}"
+        )
+        data = response.json()
+
+        return data["historicalHighLow"]
