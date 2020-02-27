@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "rug"
+version = "0.1.0"
+description = ""
+authors = ["Pavel Hrdina, Patrick Roach"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+httpx = "^0.11.1"
+
+[tool.poetry.dev-dependencies]
+sphinx = "^2.4.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

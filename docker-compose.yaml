@@ -5,6 +5,7 @@ services:
     build:
       context: .
     volumes:
-      - ./work:/home/jovyan/work
+      - ./notebooks:/home/jovyan/notebooks
+      - ./rug:/home/jovyan/notebooks/rug
     ports:
       - 8888:8888
