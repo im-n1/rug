@@ -8,9 +8,9 @@ import re
 
 import six
 
-from stocktwits.binder import bind_api
-from stocktwits.error import StocktwitError
-from stocktwits.parsers import ModelParser, Parser
+from rug.stocktwits.binder import bind_api
+from rug.stocktwits.error import StocktwitError
+from rug.stocktwits.parsers import ModelParser, Parser
 
 
 class API(object):

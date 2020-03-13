@@ -18,9 +18,9 @@ from time import sleep
 import six
 from requests.exceptions import Timeout
 
-from stocktwits.api import API
-from stocktwits.error import StocktwitError
-from stocktwits.models import Status
+from rug.stocktwits.api import API
+from rug.stocktwits.error import StocktwitError
+from rug.stocktwits.models import Status
 
 STREAM_VERSION = '1.1'
 

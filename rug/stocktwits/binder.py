@@ -11,9 +11,9 @@ import requests
 import six
 from six.moves.urllib.parse import quote, urlencode
 
-from stocktwits.error import is_rate_limit_error_message, RateLimitError, StocktwitError
-from stocktwits.models import Model
-from stocktwits.utils import convert_to_utf8_str
+from rug.stocktwits.error import is_rate_limit_error_message, RateLimitError, StocktwitError
+from rug.stocktwits.models import Model
+from rug.stocktwits.utils import convert_to_utf8_str
 
 re_path_template = re.compile(r'{\w+}')
 
