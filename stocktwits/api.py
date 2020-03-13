@@ -346,7 +346,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/streams/watchlist/{id}.json',
+            path='/streams/watchlist/{id}.json'.format(id=id),
             payload_type='json', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True
@@ -511,7 +511,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/streams/conversation/{id}.json',
+            path='/streams/conversation/{id}.json'.format(id=id),
             payload_type='json', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback'],
             require_auth=False
@@ -591,7 +591,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/messages/show/{id}.json',
+            path='/messages/show/{id}.json'.format(id=id),
             payload_type='json', payload_list=False,
             allowed_param=['id', 'conversation', 'callback'],
             require_auth=False
@@ -696,7 +696,7 @@ class API(object):
         return bind_api(
             api=self,
             path='/graph/recently_viewed.json',
-            payload_type='recently_viewd', payload_list=True,
+            payload_type='recently_viewed', payload_list=True,
             allowed_param=[],
             require_auth=True
         )
@@ -707,7 +707,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/friendships/create/{id}.json',
+            path='/friendships/create/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -720,7 +720,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/friendships/destroy/{id}.json',
+            path='/friendships/destroy/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -759,7 +759,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/watchlists/update/{id}.json',
+            path='/watchlists/update/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'name'],
@@ -772,7 +772,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/watchlists/destroy/{id}.json',
+            path='/watchlists/destroy/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'name'],
@@ -785,7 +785,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/watchlists/show/{id}.json',
+            path='/watchlists/show/{id}.json'.format(id=id),
             payload_type='watchlist', payload_list=True,
             allowed_param=['id', 'callback'],
             require_auth=True
@@ -826,7 +826,7 @@ class API(object):
             symbols = ','.join(symbols)
         return bind_api(
             api=self,
-            path='/watchlists/{id}/symbols/destroy.json',
+            path='/watchlists/{id}/symbols/destroy.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'symbols'],
@@ -839,7 +839,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/blocks/create/{id}.json',
+            path='/blocks/create/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -852,7 +852,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/blocks/destroy/{id}.json',
+            path='/blocks/destroy/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -865,7 +865,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/mutes/create/{id}.json',
+            path='/mutes/create/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -878,7 +878,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/mutes/destroy/{id}.json',
+            path='/mutes/destroy/{id}.json'.format(id=id),
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -991,7 +991,7 @@ class API(object):
             range='twentyfour'
         return bind_api(
             api=self,
-            path='/heatmap/sectors.json?range={range}',
+            path='/heatmap/sectors.json?range={range}'.format(range=range),
             payload_type='sectors',
             allowed_param=['range'], payload_list=True,
             require_auth=False
@@ -1064,7 +1064,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/symbols/show_full/{symbol}.json',
+            path='/symbols/show_full/{symbol}.json'.format(symbol=symbol),
             payload_type='symbol',
             allowed_param=['symbol'],
             require_auth=False
@@ -1076,7 +1076,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/articles.json',
+            path='/symbols/{symbol}/articles.json'.format(symbol=symbol),
             payload_type='articles',
             allowed_param=['symbol'],
             require_auth=False
@@ -1088,7 +1088,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/intraday?symbol={symbol}&zoom={zoom}',
+            path='/intraday?symbol={symbol}&zoom={zoom}'.format(symbol=symbol, zoom=zoom),
             payload_type='intraday',
             allowed_param=['symbol', 'zoom'], payload_list=True,
             require_auth=False, ql_api=True
@@ -1108,7 +1108,7 @@ class API(object):
             raise StocktwitError('Symbols data must be a list or a string (comma delimited) of 1 or more symbols')
         return bind_api(
             api=self,
-            path='/intraday_multi?symbols={symbols}',
+            path='/intraday_multi?symbols={symbols}'.format(symbols=symbols),
             payload_type='intraday_multi',
             allowed_param=['symbols'], payload_list=True,
             require_auth=False, ql_api=True
@@ -1127,7 +1127,7 @@ class API(object):
             raise StocktwitError('Symbols data must be a list or a string (comma delimited) of 1 or more symbols')
         return bind_api(
             api=self,
-            path='/batch?symbols={symbols}',
+            path='/batch?symbols={symbols}'.format(symbols=symbols),
             payload_type='json',
             allowed_param=['symbols'], payload_list=True,
             require_auth=False, ql_api=True
@@ -1152,7 +1152,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/sentiment.json',
+            path='/symbols/{symbol}/sentiment.json'.format(symbol=symbol),
             payload_type='sentiment',
             allowed_param=['symbol'], payload_list=True,
             require_auth=False
@@ -1164,7 +1164,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/volume.json',
+            path='/symbols/{symbol}/volume.json'.format(symbol=symbol),
             payload_type='data',
             allowed_param=['symbol'], payload_list=True,
             require_auth=False
@@ -1200,7 +1200,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/room/{slug}/role',
+            path='/room/{slug}/role'.format(slug=slug),
             payload_type='role',
             allowed_param=['slug'],
             require_auth=True, rooms_api=True
@@ -1212,7 +1212,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/room/{slug}/messages?',
+            path='/room/{slug}/messages?'.format(slug=slug),
             payload_type='room_messages',
             allowed_param=['slug', 'flat', 'limit', 'order', 'until'],
             require_auth=True, rooms_api=True
@@ -1284,7 +1284,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/users/{user}/extended.json',
+            path='/users/{user}/extended.json'.format(user=user),
             payload_type='user',
             allowed_param=['user'],
             require_auth=False
@@ -1296,7 +1296,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/users/{user}/tooltip.json',
+            path='/users/{user}/tooltip.json'.format(user=user),
             payload_type='user',
             allowed_param=['user'],
             require_auth=False
@@ -1308,7 +1308,7 @@ class API(object):
         """
         return bind_api(
             api=self,
-            path='/relations/{symbol}/stock_related_combined.json',
+            path='/relations/{symbol}/stock_related_combined.json'.format(symbol=symbol),
             payload_type='symbol',
             allowed_param=['symbol'],
             require_auth=False
