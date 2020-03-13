@@ -7,10 +7,10 @@ import os
 import re
 
 import six
+from rug.stocktwits.official.error import StocktwitError
+from rug.stocktwits.official.parsers import ModelParser, Parser
 
-from rug.stocktwits.binder import bind_api
-from rug.stocktwits.error import StocktwitError
-from rug.stocktwits.parsers import ModelParser, Parser
+from rug.stocktwits.official.binder import bind_api
 
 
 class API(object):

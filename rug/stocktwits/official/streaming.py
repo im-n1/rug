@@ -18,9 +18,9 @@ from time import sleep
 import six
 from requests.exceptions import Timeout
 
-from rug.stocktwits.api import API
-from rug.stocktwits.error import StocktwitError
-from rug.stocktwits.models import Status
+from rug.stocktwits.official.api import API
+from rug.stocktwits.official.error import StocktwitError
+from rug.stocktwits.official.models import Status
 
 STREAM_VERSION = '1.1'
 
@@ -124,7 +124,8 @@ class StreamListener(object):
         """Called when a limitation notice arrives"""
         return
 
-    def on_error(self, status_code):
+    @staticmethod
+    def on_error():
         """Called when a non-200 status code is returned"""
         return False
 
@@ -243,6 +244,9 @@ class Stream(object):
         self.proxies = options.get("proxies")
         self.host = options.get('host', 'stream.stocktwits.com')
 
+        self.session = None
+        self.url = None
+
     def new_session(self):
         self.session = requests.Session()
         self.session.headers = self.headers
@@ -303,6 +307,7 @@ class Stream(object):
                 self.snooze_time = min(self.snooze_time + self.snooze_time_step,
                                        self.snooze_time_cap)
             except Exception as exc:
+                print(exc)
                 exc_info = sys.exc_info()
                 # any other exception is fatal, so kill loop
                 break
@@ -344,7 +349,7 @@ class Stream(object):
                     length = int(stripped_line)
                     break
                 else:
-                    raise TweepError('Expecting length, unexpected value found')
+                    raise StocktwitError('Expecting length, unexpected value found')
 
             next_status_obj = buf.read_len(length)
             if self.running and next_status_obj:
@@ -402,7 +407,7 @@ class Stream(object):
                    encoding='utf8'):
         self.session.params = {'delimited': 'length'}
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/user.json' % STREAM_VERSION
         self.host = 'userstream.stocktwits.com'
         if stall_warnings:
@@ -413,7 +418,7 @@ class Stream(object):
             self.session.params['replies'] = replies
         if locations and len(locations) > 0:
             if len(locations) % 4 != 0:
-                raise TweepError("Wrong number of locations points, "
+                raise StocktwitError("Wrong number of locations points, "
                                  "it has to be a multiple of 4")
             self.session.params['locations'] = ','.join(['%.2f' % l for l in locations])
         if track:
@@ -424,7 +429,7 @@ class Stream(object):
     def firehose(self, count=None, is_async=False):
         self.session.params = {'delimited': 'length'}
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/statuses/firehose.json' % STREAM_VERSION
         if count:
             self.url += '&count=%s' % count
@@ -433,14 +438,14 @@ class Stream(object):
     def retweet(self, is_async=False):
         self.session.params = {'delimited': 'length'}
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/statuses/retweet.json' % STREAM_VERSION
         self._start(is_async)
 
     def sample(self, is_async=False, languages=None, stall_warnings=False):
         self.session.params = {'delimited': 'length'}
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/statuses/sample.json' % STREAM_VERSION
         if languages:
             self.session.params['language'] = ','.join(map(str, languages))
@@ -453,7 +458,7 @@ class Stream(object):
         self.body = {}
         self.session.headers['Content-type'] = "application/x-www-form-urlencoded"
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/statuses/filter.json' % STREAM_VERSION
         if follow:
             self.body['follow'] = u','.join(follow).encode(encoding)
@@ -461,7 +466,7 @@ class Stream(object):
             self.body['track'] = u','.join(track).encode(encoding)
         if locations and len(locations) > 0:
             if len(locations) % 4 != 0:
-                raise TweepError("Wrong number of locations points, "
+                raise StocktwitError("Wrong number of locations points, "
                                  "it has to be a multiple of 4")
             self.body['locations'] = u','.join(['%.4f' % l for l in locations])
         if stall_warnings:
@@ -477,7 +482,7 @@ class Stream(object):
                    with_='user', replies=False, is_async=False):
         self.body = {}
         if self.running:
-            raise TweepError('Stream object already connected!')
+            raise StocktwitError('Stream object already connected!')
         self.url = '/%s/site.json' % STREAM_VERSION
         self.body['follow'] = u','.join(map(six.text_type, follow))
         self.body['delimited'] = 'length'

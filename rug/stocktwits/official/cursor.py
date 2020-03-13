@@ -2,8 +2,8 @@
 # Copyright 2019 John Patrick Roach
 # See LICENSE for details.
 
-from tweepy.error import TweepError
-from tweepy.parsers import ModelParser, RawParser
+from rug.stocktwits.official.error import StocktwitError
+from rug.stocktwits.official.parsers import ModelParser, RawParser
 
 
 class Cursor(object):
@@ -18,9 +18,9 @@ class Cursor(object):
             elif method.pagination_mode == 'page':
                 self.iterator = PageIterator(method, *args, **kwargs)
             else:
-                raise TweepError('Invalid pagination mode.')
+                raise StocktwitError('Invalid pagination mode.')
         else:
-            raise TweepError('This method does not perform pagination')
+            raise StocktwitError('This method does not perform pagination')
 
     def pages(self, limit=0):
         """Return iterator for pages"""
@@ -79,7 +79,7 @@ class CursorIterator(BaseIterator):
 
     def prev(self):
         if self.prev_cursor == 0:
-            raise TweepError('Can not page back more, at first page')
+            raise StocktwitError('Can not page back more, at first page')
         data, self.next_cursor, self.prev_cursor = self.method(cursor=self.prev_cursor,
                                                                *self.args,
                                                                **self.kwargs)
@@ -97,8 +97,10 @@ class IdIterator(BaseIterator):
         self.model_results = []
         self.index = 0
 
+    @property
     def next(self):
         """Fetch a set of items with IDs less than current set."""
+        old_parser = None
         if self.limit and self.limit == self.num_tweets:
             raise StopIteration
 
@@ -172,14 +174,15 @@ class PageIterator(BaseIterator):
 
     def prev(self):
         if self.current_page == 1:
-            raise TweepError('Can not page back more, at first page')
+            raise StocktwitError('Can not page back more, at first page')
         self.current_page -= 1
         return self.method(page=self.current_page, *self.args, **self.kwargs)
 
 
 class ItemIterator(BaseIterator):
 
-    def __init__(self, page_iterator):
+    def __init__(self, page_iterator, method, *args, **kwargs):
+        super().__init__(method, *args, **kwargs)
         self.page_iterator = page_iterator
         self.limit = 0
         self.current_page = None
@@ -192,7 +195,7 @@ class ItemIterator(BaseIterator):
                 raise StopIteration
         if self.current_page is None or self.page_index == len(self.current_page) - 1:
             # Reached end of current page, get the next page...
-            self.current_page = self.page_iterator.next()
+            self.current_page = self.page_iterator.next
             self.page_index = -1
         self.page_index += 1
         self.num_tweets += 1
@@ -200,13 +203,13 @@ class ItemIterator(BaseIterator):
 
     def prev(self):
         if self.current_page is None:
-            raise TweepError('Can not go back more, at first page')
+            raise StocktwitError('Can not go back more, at first page')
         if self.page_index == 0:
             # At the beginning of the current page, move to next...
             self.current_page = self.page_iterator.prev()
             self.page_index = len(self.current_page)
             if self.page_index == 0:
-                raise TweepError('No more items')
+                raise StocktwitError('No more items')
         self.page_index -= 1
         self.num_tweets -= 1
         return self.current_page[self.page_index]

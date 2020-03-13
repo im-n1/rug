@@ -9,11 +9,11 @@ import time
 
 import requests
 import six
+from rug.stocktwits.official.error import is_rate_limit_error_message, RateLimitError, StocktwitError
+from rug.stocktwits.official.models import Model
 from six.moves.urllib.parse import quote, urlencode
 
-from rug.stocktwits.error import is_rate_limit_error_message, RateLimitError, StocktwitError
-from rug.stocktwits.models import Model
-from rug.stocktwits.utils import convert_to_utf8_str
+from rug.stocktwits.official.utils import convert_to_utf8_str
 
 re_path_template = re.compile(r'{\w+}')
 
@@ -44,7 +44,7 @@ def bind_api(**config):
             # If authentication is required and no credentials
             # are provided, throw an error.
             if self.require_auth and not api.auth:
-                print('Authentication required!')
+                raise StocktwitError('Authentication required!')
             self.post_data = kwargs.pop('post_data', None)
             self.json_payload = kwargs.pop('json_payload', None)
             self.retry_count = kwargs.pop('retry_count',
@@ -57,23 +57,45 @@ def bind_api(**config):
                                                  api.wait_on_rate_limit)
             self.wait_on_rate_limit_notify = kwargs.pop('wait_on_rate_limit_notify',
                                                         api.wait_on_rate_limit_notify)
+            self.return_cursors = kwargs.pop('return_cursors', False)
             self.parser = kwargs.pop('parser', api.parser)
             self.session.headers = kwargs.pop('headers', {})
             self.build_parameters(args, kwargs)
             # Pick correct URL root to use
-            api_list = [attr for attr in dir(self) if attr.endswith('_api') and attr == True]
-            if api_list:
-                for attr in [attr for attr in dir(self) if attr.endswith('_api') and attr == True]:
-                    setattr(self, 'api_root', api.getattr(attr.replace('_api', '_root')))
+            if self.login_api:
+                self.api_root = api.login_root
+            elif self.rooms_api:
+                self.api_root = api.upload_root
+            elif self.avatars_api:
+                self.api_root = api.avatars_root
+            elif self.charts_api:
+                self.api_root = api.charts_root
+            elif self.ql_api:
+                self.api_root = api.ql_root
+            elif self.assets_api:
+                self.api_root = api.assets_root
             else:
-                self.root = api.api_root
+                self.api_root = api.api_root
             # Perform any path variable substitution
             self.build_path()
-            if api_list:
-                for attr in [attr for attr in dir(self) if attr.endswith('_api') and attr == True]:
-                    setattr(self, 'host', api.getattr(attr.replace('_api', '_host')))
+            if self.login_api:
+                self.host = api.login_host
+            elif self.rooms_api:
+                self.host = api.upload_host
+            elif self.avatars_api:
+                self.host = api.avatars_host
+            elif self.charts_api:
+                self.host = api.charts_host
+            elif self.ql_api:
+                self.host = api.ql_host
+            elif self.assets_api:
+                self.host = api.assets_host
             else:
-                self.root = api.host
+                self.host = api.api_host
+            # Manually set Host header to fix an issue in python 2.5
+            # or older where Host is set including the 443 port.
+            # This causes Twitter to issue 301 redirect.
+            # See Issue https://github.com/tweepy/tweepy/issues/12
             self.session.headers['Host'] = self.host
             # Monitoring rate limits
             self._remaining_calls = None
@@ -215,7 +237,8 @@ def bind_api(**config):
                 try:
                     error_msg, api_error_code = \
                         self.parser.parse_error(resp.text)
-                except Exception:
+                except Exception as exc:
+                    print(exc)
                     error_msg = "StockTwits error response: status code = %s" % resp.status_code
                     api_error_code = None
 
@@ -225,7 +248,8 @@ def bind_api(**config):
                     raise StocktwitError(error_msg, resp, api_code=api_error_code)
 
             # Parse the response payload
-            result = self.parser.parse(self, resp.text)
+            self.return_cursors = self.return_cursors or 'cursor' in self.session.params
+            result = self.parser.parse(self, resp.text, return_cursors=self.return_cursors)
 
             # Store result into cache if one is available.
             if self.use_cache and self.api.cache and self.method == 'GET' and result:
@@ -245,7 +269,10 @@ def bind_api(**config):
 
     # Set pagination mode
     if 'cursor' in APIMethod.allowed_param:
-        _call.pagination_mode = 'cursor'
+        if APIMethod.payload_type == 'direct_message':
+            _call.pagination_mode = 'dm_cursor'
+        else:
+            _call.pagination_mode = 'cursor'
     elif 'max_id' in APIMethod.allowed_param:
         if 'since_id' in APIMethod.allowed_param:
             _call.pagination_mode = 'id'

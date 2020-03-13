@@ -4,8 +4,8 @@
 
 import json as json_lib
 
-from rug.stocktwits.error import StocktwitError
-from rug.stocktwits.models import ModelFactory
+from rug.stocktwits.official.error import StocktwitError
+from rug.stocktwits.official.models import ModelFactory
 
 
 class Parser(object):

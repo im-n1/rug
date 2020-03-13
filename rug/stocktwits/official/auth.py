@@ -6,8 +6,8 @@ import logging
 
 from requests_oauthlib import OAuth2Session, OAuth2
 
-from rug.stocktwits.api import API
-from rug.stocktwits.error import StocktwitError
+from rug.stocktwits.official.api import API
+from rug.stocktwits.official.error import StocktwitError
 
 log = logging.getLogger(__name__)
 
