@@ -11,11 +11,9 @@ __license__ = 'MIT'
 
 from stocktwits.api import API
 from stocktwits.auth import WebAppAuthHandler
-from stocktwits.cache import Cache, FileCache, MemoryCache
 from stocktwits.cursor import Cursor
 from stocktwits.error import RateLimitError, StocktwitError
-from stocktwits.models import DirectMessage, Friendship, ModelFactory, SavedSearch, SearchResults, Status, User
-from stocktwits.streaming import Stream, StreamListener
+from rug.stocktwits.streaming import Stream, StreamListener
 
 # Global, unauthenticated instance of API
 api = API()
