@@ -1,0 +1,402 @@
+USER:
+{
+  "response": {"status": 200},
+  "user": {
+    "id": 176388,
+    "username": "stocktwits_dev",
+    "name": "New Name",
+    "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+    "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+    "identity": "User",
+    "classification": [],
+    "followers": 3,
+    "following": 3,
+    "ideas": 1,
+    "following_stocks": 3,
+    "bio": null,
+    "website_url": null,
+    "trading_strategy": {
+      "assets_frequently_traded": [],
+      "approach": null,
+      "holding_period": null,
+      "experience": null
+    }
+  }
+}
+
+SYMBOL:
+{
+      "id": 17,
+      "symbol": "JOY",
+      "title": "Joy Global, Inc.",
+      "exchange": "NYSE",
+      "sector": "Industrial Goods",
+      "industry": "REIT - Residential",
+      "type": "symbol"
+    }
+
+MESSAGE:
+{
+  "response": {
+    "status": 200
+  },
+  "message": {
+    "id": 31,
+    "body": "something about $NQ_F",
+    "created_at": "2012-10-08 21:40:22 UTC",
+    "user": {
+      "id": 2,
+      "username": "ppearlman",
+      "name": "Phil Pearlman",
+      "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+      "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+      "identity": "User",
+      "classification": [
+
+      ],
+      "followers": 0,
+      "following": 0,
+      "ideas": 0,
+      "following_stocks": 0,
+      "bio": "Psychologist, Hedgie, entrepeneur, seed investor, stocktwits ftw!",
+      "website_url": "http://philpearlman.com/",
+      "trading_strategy": {
+        "assets_frequently_traded": [
+          "Equities"
+        ],
+        "approach": "Growth",
+        "holding_period": "Long Term Investor",
+        "experience": "Novice"
+      }
+    },
+    "source": {
+      "id": 1,
+      "title": "Stocktwits",
+      "url": "http://stocktwits.com"
+    },
+    "symbols": [
+      {
+        "id": 31,
+        "symbol": "NQ_F",
+        "title": "E-Mini NASDAQ 100 Futures",
+        "exchange": "CME",
+        "sector": null,
+        "industry": null
+      }
+    ],
+    "entities": {
+      "chart": {
+        "thumb": "/chart_images/small/missing.png",
+        "original": "/chart_images/original/missing.png"
+      },
+      "sentiment": null
+    }
+  }
+}
+
+WATCHLIST:
+{
+  "response": {"status":200},
+  "watchlist": {
+    "id": 38398,
+    "name": "my picks",
+    "updated_at": "2012-08-13T22:26:20Z",
+    "created_at": "2012-08-10T22:03:24Z",
+    "symbols": [
+      {
+        "id": 7871,
+        "symbol": "FB",
+        "title": "Facebook",
+        "exchange": "NASDAQ",
+        "sector": "Technology",
+        "industry": "Internet Information Providers"
+      },
+      {
+        "id": 2044,
+        "symbol": "GOOG",
+        "title": "Google Inc.",
+        "exchange": "NASDAQ",
+        "sector": "Technology",
+        "industry": "Internet Information Providers"
+      },
+      {
+        "id": 686,
+        "symbol": "AAPL",
+        "title": "Apple Inc.",
+        "exchange": "NASDAQ",
+        "sector": "Technology",
+        "industry": "Personal Computers"
+      }
+    ]
+  }
+}
+
+
+
+
+
+========================================================================================================================
+
+
+
+
+
+streams/user
+Returns the most recent 30 messages for the specified user. Includes user object in response.
+URL
+https://api.stocktwits.com/api/2/streams/user/:id.json
+Pagination?	Yes
+Response Formats:	JSON
+{
+  "response": {
+    "status": 200
+  },
+  "user": {
+    "id": 3,
+    "username": "zerobeta",
+    "name": "Justin Paterno",
+    "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+    "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+    "identity": "Official",
+    "classification": [
+      "ir"
+    ]
+  },
+  "cursor": {
+    "more": true,
+    "since": 40,
+    "max": 42
+  },
+  "messages": [
+    {
+      "id": 40,
+      "body": "I sold $NQ_F",
+      "created_at": "2012-10-08 21:40:46 UTC",
+      "user": {
+        "id": 3,
+        "username": "zerobeta",
+        "name": "Justin Paterno",
+        "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+        "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+        "identity": "Official",
+        "classification": [
+          "ir"
+        ]
+      },
+      "source": {
+        "id": 1,
+        "title": "Stocktwits",
+        "url": "http://stocktwits.com"
+      },
+      "symbols": [
+        {
+          "id": 31,
+          "symbol": "NQ_F",
+          "title": "E-Mini NASDAQ 100 Futures",
+        }
+      ],
+
+    },...
+
+
+
+
+========================================================================================================================
+
+
+
+streams/symbol
+Returns the most recent 30 messages for the specified symbol. Includes symbol object in response.
+{
+  "response": {
+    "status": 200
+  },
+  "symbol": {
+    "id": 17,
+    "symbol": "JOY",
+    "title": "Joy Global, Inc.",
+  },
+  "cursor": {
+    "more": true,
+    "since": 49,
+    "max": 51
+  },
+  "messages": [
+    {
+      "id": 49,
+      "body": "short $JOY",
+      "created_at": "2012-10-08 21:41:38 UTC",
+      "user": {
+        "id": 2,
+        "username": "ppearlman",
+        "name": "Phil Pearlman",
+        "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+        "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+        "identity": "User",
+        "classification": [
+          "suggested"
+        ]
+      },
+      "source": {
+        "id": 1,
+        "title": "Stocktwits",
+        "url": "http://stocktwits.com"
+      },
+      "symbols": [
+        {
+          "id": 17,
+          "symbol": "JOY",
+          "title": "Joy Global, Inc.",
+        }
+      ],
+
+    },
+    {....
+
+
+
+========================================================================================================================
+
+
+
+streams/friends
+Returns the most recent 30 messages posted to the authenticating user's people stream of the users they follow.
+
+streams/all
+Returns the most recent 30 messages for all non-private symbols.
+
+
+
+========================================================================================================================
+
+
+NOTE: MESSAGE SHOULD BE ONE MODEL. LOOK AT ALL STREAMS ENDPOINTS TO SEE WHAT IS POSSIBLY SENT IN MESSAGES
+
+
+========================================================================================================================
+
+
+search/index
+This allows an API application to search for a symbol or user. 30 Results will be a combined list of symbols and users.
+
+
+returns 30 results of users or symbols
+
+========================================================================================================================
+
+
+NOTE: USERS AND SYMBOLS SHOULD BE MODELS.
+
+{
+      "id": 17,
+      "symbol": "JOY",
+      "title": "Joy Global, Inc.",
+      "type": "symbol"
+}
+
+
+{
+      "id": 1,
+      "username": "howardlindzon",
+      "name": "Howard Lindzon",
+      "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+      "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+      "identity": "User",
+      "classification": [
+
+      ],
+      "type": "user"
+}
+
+
+{
+  "response": {"status": 200},
+  "user": {
+    "id": 176388,
+    "username": "stocktwits_dev",
+    "name": "New Name",
+    "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+    "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+    "identity": "User",
+    "classification": [],
+    "followers": 3,
+    "following": 3,
+    "ideas": 1,
+    "following_stocks": 3,
+    "bio": null,
+    "website_url": null,
+    "trading_strategy": {
+      "assets_frequently_traded": [],
+      "approach": null,
+      "holding_period": null,
+      "experience": null
+    }
+  }
+}
+
+========================================================================================================================
+
+
+messages/create
+Create a Stocktwits message. To upload a chart to accompany the message, pass a file using the chart parameter. The API
+will check that the character count is under 140, will shorten all links, and prevent duplicate message postings. Learn
+more about parameters and character counting
+The reposonse returned on creating a message is a great way to use Stocktwits context with content sent to another
+non-finacially focused social network such as Facebook, LinkedIn or Twitter. By using the body content that is returned
+you will receive the complete message compiled with any shortened links. Because these other platforms aren't as
+investor-focused as Stocktwits they may lack the context like price, chart or video. Sending the response's body will
+allow the user of those other networks access to the finacial context of the message with a link back to the appropriate
+page.
+
+The Message ID can be used to create your own link to the message as a landing page. This comes in handy in the case of
+a Chart or Video where you might not want to create your own webpage or integrate the chart or video into your
+application.
+
+
+"message": {
+    "id": 73,
+    "body": "something about $NQ_F",
+    "created_at": "2012-10-08 21:43:28 UTC",
+    "user": {
+      "id": 2,
+      "username": "ppearlman",
+      "name": "Phil Pearlman",
+      "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
+      "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
+      "identity": "Official",
+      "classification": [
+        "ir",
+        "suggested"
+      ]
+    },
+    "source": {
+      "id": 1,
+      "title": "Stocktwits",
+      "url": "http://stocktwits.com"
+    },
+    "symbols": [
+      {
+        "id": 31,
+        "symbol": "NQ_F",
+        "title": "E-Mini NASDAQ 100 Futures",
+      }
+    ],
+    "entities": {
+      "chart": {
+        "thumb": "/chart_images/small/missing.png",
+        "original": "/chart_images/original/missing.png"
+      }
+    }
+}
+
+
+
+========================================================================================================================
+
+
+graph/blocking
+Returns the list of users that were blocked by the authenticating user.
+
+graph/symbols
+Returns the list of ticker symbols publically followed by the authenticating user.
+
