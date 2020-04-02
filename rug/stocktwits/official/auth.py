@@ -61,7 +61,7 @@ class WebAppAuthHandler(AuthHandler):
 
 class SignInAuthHandler(AuthHandler):
     # TODO: add this functionality
-    """ Mimic the registration and sign-in process the uses a "Connect with Stocktwits" button.
+    """ Mimic the registration and sign-in process that uses a "Connect with Stocktwits" button.
         :reference: https://api.stocktwits.com/developers/docs/signin
     """
     OAUTH_HOST = 'api.stocktwits.com/api/2/'

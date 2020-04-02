@@ -256,30 +256,33 @@ class API(object):
                 )
             )
 
-    def stream_user(self, id):
+    @property
+    def stream_user(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-user-docs
             :allowed_param: 'id', 'since', 'max', 'limit', 'callback', 'filter'
         """
         return bind_api(
             api=self,
-            path='/streams/user/{id}.json'.format(id=id),
-            payload_type='json', payload_list=True,
+            path='/streams/user/{id}.json',
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=False
         )
 
-    def stream_symbol(self, id):
+    @property
+    def stream_symbol(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-symbol-docs
             :allowed_param: 'id', 'since', 'max', 'limit', 'callback', 'filter'
         """
         return bind_api(
             api=self,
-            path='/streams/symbol/{id}.json'.format(id=id),
-            payload_type='json', payload_list=True,
+            path='/streams/symbol/{id}.json',
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=False
         )
 
+    @property
     def stream_friends(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-friends-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -287,11 +290,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/friends.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True
         )
 
+    @property
     def stream_mentions(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-mentions-docs
             :allowed_param: 'since', 'max', 'limit', 'callback'
@@ -299,11 +303,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/mentions.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback'],
             require_auth=True
         )
 
+    @property
     def stream_direct(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-direct-docs
             :allowed_param: 'since', 'max', 'limit', 'callback'
@@ -311,11 +316,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/direct.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback'],
             require_auth=True
         )
 
+    @property
     def stream_direct_sent(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-direct_sent-docs
             :allowed_param: 'since', 'max', 'limit', 'callback'
@@ -323,35 +329,38 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/direct_sent.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback'],
             require_auth=True
         )
 
-    def direct_received(self):
+    @property
+    def stream_direct_received(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-direct_received-docs
             :allowed_param: 'since', 'max', 'limit', 'callback'
         """
         return bind_api(
             api=self,
             path='/streams/direct_received.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback'],
             require_auth=True
         )
 
-    def stream_watchlist(self, id):
+    @property
+    def stream_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-watchlist-docs
             :allowed_param: 'id', 'since', 'max', 'limit', 'callback', 'filter'
         """
         return bind_api(
             api=self,
-            path='/streams/watchlist/{id}.json'.format(id=id),
-            payload_type='json', payload_list=True,
+            path='/streams/watchlist/{id}.json',
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True
         )
 
+    @property
     def stream_static_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-watchlist-docs
             :allowed_param: 'id', 'since', 'max', 'limit', 'callback', 'filter'
@@ -359,11 +368,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/watchlist/static.json',
-            payload_type='watchlist', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True
         )
 
+    @property
     def stream_all(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-all-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -371,12 +381,13 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/all.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
+    @property
     def stream_charts(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-charts-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -384,11 +395,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/charts.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=False
         )
 
+    @property
     def stream_equities(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-equities-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -396,12 +408,13 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/equities.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
+    @property
     def stream_forex(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-forex-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -409,12 +422,13 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/forex.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
+    @property
     def stream_futures(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-futures-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -422,12 +436,13 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/futures.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
+    @property
     def stream_private_companies(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-private_companies-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -435,12 +450,13 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/private_companies.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
+    @property
     def stream_suggested(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-suggested-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -448,37 +464,25 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/suggested.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=False
         )
 
-    def stream_symbols(self, symbols):
+    @property
+    def stream_symbols(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-symbols-docs
             :allowed_param: 'symbols', 'since', 'max', 'limit', 'callback', 'filter'
         """
-        if isinstance(symbols, list):
-            if len(symbols) > 10:
-                raise StocktwitError('Symbols list is too big, must be 10 or less.')
-            else:
-                symbols = ','.join(symbols)
-        elif isinstance(symbols, str):
-            symbols = symbols.split(',')
-            if len(symbols) > 10:
-                raise StocktwitError('Symbols list is too big, must be 10 or less.')
-            else:
-                symbols = ','.join(symbols)
-        else:
-            raise StocktwitError('Symbols data must be a list or a string (comma delimited) of 1 or more symbols')
         return bind_api(
             api=self,
             path='/streams/symbols.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['symbols', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
-        )(symbols=symbols)
-
+        )
+    @property
     def stream_trending(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-trending-docs
             :allowed_param: 'since', 'max', 'limit', 'callback', 'filter'
@@ -486,11 +490,12 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/trending.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['since', 'max', 'limit', 'callback', 'filter'],
             require_auth=False
         )
 
+    @property
     def stream_sectors(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-sectors-docs
             :allowed_param: 'sector_path', 'since', 'max', 'limit', 'callback', 'filter'
@@ -499,29 +504,32 @@ class API(object):
         return bind_api(
             api=self,
             path='/streams/{sector_path}.json',
-            payload_type='json', payload_list=True,
+            payload_type='message', payload_list=True,
             allowed_param=['sector_path', 'since', 'max', 'limit', 'callback', 'filter'],
             require_auth=True,
             partner_level=True
         )
 
-    def stream_conversation(self, id):
+    @property
+    def stream_conversation(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#streams-conversation-docs
             :allowed_param: 'id', 'since', 'max', 'limit', 'callback'
         """
         return bind_api(
             api=self,
-            path='/streams/conversation/{id}.json'.format(id=id),
-            payload_type='json', payload_list=True,
+            path='/streams/conversation/{id}.json',
+            payload_type='message', payload_list=True,
             allowed_param=['id', 'since', 'max', 'limit', 'callback'],
             require_auth=False
         )
+
 
     def me(self):
         """ Get the authenticated user """
         return self.verify_account()['user']['username']
 
-    def search(self, q):
+    @property
+    def search(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#search-index-docs
             :allowed_param: 'q', 'callback'
         """
@@ -531,9 +539,10 @@ class API(object):
             payload_type='json', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
-        )(q=q)
+        )
 
-    def search_symbols(self, q):
+    @property
+    def search_symbols(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#search-symbols-docs
             :allowed_param: 'q', 'callback'
         """
@@ -543,9 +552,10 @@ class API(object):
             payload_type='json', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
-        )(q=q)
+        )
 
-    def search_users(self, q):
+    @property
+    def search_users(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#search-users-docs
             :allowed_param: 'q', 'callback'
         """
@@ -555,9 +565,9 @@ class API(object):
             payload_type='json', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
-        )(q=q)
+        )
 
-    def create_message(self, chart_name=None, chart=None):
+    def create_message(self, chart_name=None, chart=None, *args, **kwargs):
         """
         Create a Stocktwits message. To upload a chart to accompany the message, pass a file using the chart parameter.
         The API will check that the character count is under 140, will shorten all links, and prevent duplicate message
@@ -571,6 +581,24 @@ class API(object):
         The Message ID can be used to create your own link to the message as a landing page. This comes in handy in the
         case of a Chart or Video where you might not want to create your own webpage or integrate the chart or video
         into your application.
+
+        Usage Examples:
+
+        //Regular Message
+            curl -X POST https://api.stocktwits.com/api/2/messages/create.json?access_token=<access_token>
+                -d 'body=Creating a new message'
+
+            * Note that the $ character in the message may need to be escaped (\$) to prevent the shell from
+                interpolating an environment variable.
+
+        //Uploading a Chart
+            curl https://api.stocktwits.com/api/2/messages/create.json -F access_token=<access_token>
+                -F body="Creating a new message with a chart. \$ticker" -F chart=@/path/to/a/local/image/file.jpg
+
+        //Uploading a Chart via Url
+            curl https://api.stocktwits.com/api/2/messages/create.json -F access_token=<access_token>
+                -F body="Creating a new message with a chart. \$ticker" -F chart="http://i.imgur.com/vMlZa.gif"
+
         :reference: https://api.stocktwits.com/developers/docs/api#messages-create-docs
         :allowed_param: 'body', 'in_reply_to_message_id', 'chart', 'sentiment'
         """
@@ -580,24 +608,26 @@ class API(object):
             api=self,
             path='/messages/create.json',
             method='POST',
-            payload_type='json', payload_list=False,
+            payload_type='message', payload_list=False,
             allowed_param=['body', 'in_reply_to_message_id', 'chart', 'sentiment'],
             require_auth=True
-        )
+        )(*args, **kwargs)
 
-    def show_message(self, id):
+    @property
+    def show_message(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#messages-show-docs
             :allowed_param: 'id', 'conversation', 'callback'
         """
         return bind_api(
             api=self,
-            path='/messages/show/{id}.json'.format(id=id),
+            path='/messages/show/{id}.json',
             payload_type='json', payload_list=False,
             allowed_param=['id', 'conversation', 'callback'],
             require_auth=False
         )
 
-    def like_message(self, id):
+    @property
+    def like_message(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#messages-like-docs
             :allowed_param: 'id'
         """
@@ -608,9 +638,10 @@ class API(object):
             payload_type='json', payload_list=False,
             allowed_param=['id'],
             require_auth=True
-        )(id=id)
+        )
 
-    def unlike_message(self, id):
+    @property
+    def unlike_message(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#messages-unlike-docs
             :allowed_param: 'id'
         """
@@ -621,7 +652,7 @@ class API(object):
             payload_type='json', payload_list=False,
             allowed_param=['id'],
             require_auth=True
-        )(id=id)
+        )
 
     @property
     def list_blocks(self):
@@ -701,26 +732,28 @@ class API(object):
             require_auth=True
         )
 
-    def create_friendship(self, id):
+    @property
+    def create_friendship(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#friendships-create-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/friendships/create/{id}.json'.format(id=id),
+            path='/friendships/create/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
             require_auth=True
         )
 
-    def destroy_friendship(self, id):
+    @property
+    def destroy_friendship(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#friendships-destroy-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/friendships/destroy/{id}.json'.format(id=id),
+            path='/friendships/destroy/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -740,7 +773,8 @@ class API(object):
             require_auth=True
         )
 
-    def create_watchlist(self, name):
+    @property
+    def create_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-create-docs
             :allowed_param: 'name'
         """
@@ -751,46 +785,50 @@ class API(object):
             payload_type='watchlist',
             allowed_param=['name'],
             require_auth=True
-        )(name=name)
+        )
 
-    def update_watchlist(self, id, name):
+    @property
+    def update_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-update-docs
             :allowed_param: 'id', 'name'
         """
         return bind_api(
             api=self,
-            path='/watchlists/update/{id}.json'.format(id=id),
+            path='/watchlists/update/{id}.json',
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'name'],
             require_auth=True
-        )(name=name)
+        )
 
-    def destroy_watchlist(self, id):
+    @property
+    def destroy_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-destroy-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/watchlists/destroy/{id}.json'.format(id=id),
+            path='/watchlists/destroy/{id}.json',
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'name'],
             require_auth=True
         )
 
-    def show_watchlist(self, id):
+    @property
+    def show_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-show-docs
             :allowed_param: 'id', 'callback'
         """
         return bind_api(
             api=self,
-            path='/watchlists/show/{id}.json'.format(id=id),
+            path='/watchlists/show/{id}.json',
             payload_type='watchlist', payload_list=True,
             allowed_param=['id', 'callback'],
             require_auth=True
         )
 
+    @property
     def static_watchlist(self):
         """ :reference: https://api.stocktwits.com/api/2/watchlists/static_watchlist.json
             :allowed_param: 'id', 'callback'
@@ -803,82 +841,84 @@ class API(object):
             require_auth=True
         )
 
-    def add_to_watchlist(self, id, symbols):
+    @property
+    def add_to_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-symbols-create-docs
             :allowed_param: 'id', 'symbols'
         """
-        if isinstance(symbols, list):
-            symbols = ','.join(symbols)
         return bind_api(
             api=self,
-            path='/watchlists/{id}/symbols/create.json'.format(id=id),
+            path='/watchlists/{id}/symbols/create.json',
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'symbols'],
             require_auth=True
-        )(symbols=symbols)
+        )
 
-    def remove_from_watchlist(self, id, symbols):
+    @property
+    def remove_from_watchlist(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#watchlists-symbols-destroy-docs
             :allowed_param: 'id', 'symbols'
         """
-        if isinstance(symbols, list):
-            symbols = ','.join(symbols)
         return bind_api(
             api=self,
-            path='/watchlists/{id}/symbols/destroy.json'.format(id=id),
+            path='/watchlists/{id}/symbols/destroy.json',
             method='POST', payload_list=False,
             payload_type='watchlist',
             allowed_param=['id', 'symbols'],
             require_auth=True
-        )(symbols=symbols)
+        )
 
-    def create_block(self, id):
+    @property
+    def create_block(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#blocks-create-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/blocks/create/{id}.json'.format(id=id),
+            path='/blocks/create/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
             require_auth=True
         )
 
-    def destroy_block(self, id):
+    @property
+    def destroy_block(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#blocks-destroy-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/blocks/destroy/{id}.json'.format(id=id),
+            path='/blocks/destroy/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
             require_auth=True
         )
 
-    def create_mute(self, id):
+    @property
+    def create_mute(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#mutes-create-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/mutes/create/{id}.json'.format(id=id),
+            path='/mutes/create/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
             require_auth=True
         )
 
-    def destroy_mute(self, id):
+    @property
+    def destroy_mute(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#mutes-destroy-docs
             :allowed_param: 'id'
         """
         return bind_api(
             api=self,
-            path='/mutes/destroy/{id}.json'.format(id=id),
+            path='/mutes/destroy/{id}.json',
             method='POST', payload_list=False,
             payload_type='user',
             allowed_param=['id'],
@@ -917,6 +957,7 @@ class API(object):
             partner_level=True
         )
 
+    @property
     def get_all_social_connections(self):
         """ :reference: https://api.stocktwits.com/api/2/account/get_all_social_connections.json
             :allowed_param:
@@ -929,6 +970,7 @@ class API(object):
             require_auth=True
         )
 
+    @property
     def trending_symbols(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#trending-symbols-docs
             :allowed_param: 'limit', 'callback'
@@ -941,6 +983,7 @@ class API(object):
             require_auth=False
         )
 
+    @property
     def trending_equities(self):
         """ :reference: https://api.stocktwits.com/developers/docs/api#trending-symbols-equities-docs
             :allowed_param: 'limit', 'callback'
@@ -981,6 +1024,7 @@ class API(object):
             partner_level=True
         )
 
+    @property
     def heatmap(self, range=None):
         """ :reference: https://api.stocktwits.com/api/2/heatmap/sectors.json
             :allowed_param: 'range'
@@ -997,6 +1041,7 @@ class API(object):
             require_auth=False
         )
 
+    @property
     def articles(self, stock_tickers=None):
         """ :reference: https://api.stocktwits.com/api/2/articles/stock_articles.json?stock_tickers=ARKQ&stock_tickers=
                         BOTZ
@@ -1024,6 +1069,7 @@ class API(object):
             require_auth=True
         )
 
+    @property
     def notifications(self):
         """ :reference: https://stocktwits.com/notifications
             :allowed_param: 'type', 'ignore_mark_read', 'since', 'max', 'filter'
@@ -1041,6 +1087,7 @@ class API(object):
             require_auth=True
         )
 
+    @property
     def unread_notifications(self):
         """ :reference: https://stocktwits.com/notifications
             :allowed_param: 'type', 'ignore_mark_read', 'since', 'max', 'filter'
@@ -1058,118 +1105,111 @@ class API(object):
             require_auth=True
         )
 
-    def symbols_full(self, symbol):
+    @property
+    def symbols_full(self):
         """ :reference: https://api.stocktwits.com/api/2/symbols/show_full/QCOM.json
             :allowed_param: 'symbol'
         """
         return bind_api(
             api=self,
-            path='/symbols/show_full/{symbol}.json'.format(symbol=symbol),
+            path='/symbols/show_full/{symbol}.json',
             payload_type='symbol',
             allowed_param=['symbol'],
             require_auth=False
         )
 
-    def symbols_articles(self, symbol):
+    @property
+    def symbols_articles(self):
         """ :reference: https://api.stocktwits.com/api/2/symbols/3290/articles.json
             :allowed_param: 'symbol'
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/articles.json'.format(symbol=symbol),
+            path='/symbols/{symbol}/articles.json',
             payload_type='articles',
             allowed_param=['symbol'],
             require_auth=False
         )
 
-    def intraday(self, symbol, zoom):
+    @property
+    def intraday(self):
         """ :reference: https://ql.stocktwits.com/intraday?symbol=QCOM&zoom=1d
             :allowed_param: 'symbol', 'zoom'
         """
         return bind_api(
             api=self,
-            path='/intraday?symbol={symbol}&zoom={zoom}'.format(symbol=symbol, zoom=zoom),
+            path='/intraday?symbol={symbol}&zoom={zoom}',
             payload_type='intraday',
             allowed_param=['symbol', 'zoom'], payload_list=True,
             require_auth=False, ql_api=True
         )
 
-
-    def intraday_multi(self, symbols):
+    @property
+    def intraday_multi(self):
         """ :reference: https://ql.stocktwits.com/intraday_multi?symbols=QCOM
             :allowed_param: 'symbols'
         """
-        if isinstance(symbols, list):
-            symbols = ','.join(symbols)
-        elif isinstance(symbols, str):
-            symbols = symbols.split(',')
-            symbols = ','.join(symbols)
-        else:
-            raise StocktwitError('Symbols data must be a list or a string (comma delimited) of 1 or more symbols')
         return bind_api(
             api=self,
-            path='/intraday_multi?symbols={symbols}'.format(symbols=symbols),
+            path='/intraday_multi?symbols={symbols}',
             payload_type='intraday_multi',
             allowed_param=['symbols'], payload_list=True,
             require_auth=False, ql_api=True
         )
 
-    def batch(self, symbols):
+    @property
+    def batch(self):
         """ :reference: https://ql.stocktwits.com/batch?symbols=QCOM
             :allowed_param: 'symbols'
         """
-        if isinstance(symbols, list):
-            symbols = ','.join(symbols)
-        elif isinstance(symbols, str):
-            symbols = symbols.split(',')
-            symbols = ','.join(symbols)
-        else:
-            raise StocktwitError('Symbols data must be a list or a string (comma delimited) of 1 or more symbols')
         return bind_api(
             api=self,
-            path='/batch?symbols={symbols}'.format(symbols=symbols),
+            path='/batch?symbols={symbols}',
             payload_type='json',
             allowed_param=['symbols'], payload_list=True,
             require_auth=False, ql_api=True
         )
 
-    def price_data(self, symbol, fundamentals=True):
+    @property
+    def price_data(self):
         """ :reference: https://ql.stocktwits.com/pricedata?symbol=QCOM&fundamentals=true
-            :allowed_param: 'symbols'
+            :allowed_param: 'symbols', 'fundamentals' (True/False)
         """
         return bind_api(
             api=self,
-            path='/intraday_multi?symbol={symbol}&fundamentals={fundamentals}'.format(symbol=symbol,
-                                                                                      fundamentals=fundamentals),
+            path='/intraday_multi?symbol={symbol}&fundamentals={fundamentals}',
             payload_type='price_data',
             allowed_param=['symbols'], payload_list=True,
             require_auth=False, ql_api=True
         )
 
-    def sentiment(self, symbol):
+    @property
+    def sentiment(self):
         """ :reference: https://api.stocktwits.com/api/2/symbols/QCOM/sentiment.json
             :allowed_param: 'symbol'
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/sentiment.json'.format(symbol=symbol),
+            path='/symbols/{symbol}/sentiment.json',
             payload_type='sentiment',
             allowed_param=['symbol'], payload_list=True,
             require_auth=False
         )
 
-    def volume(self, symbol):
+    @property
+    def volume(self):
         """ :reference: https://api.stocktwits.com/api/2/symbols/SJM/volume.json
             :allowed_param: 'symbol'
         """
         return bind_api(
             api=self,
-            path='/symbols/{symbol}/volume.json'.format(symbol=symbol),
+            path='/symbols/{symbol}/volume.json',
             payload_type='data',
             allowed_param=['symbol'], payload_list=True,
             require_auth=False
         )
 
+    @property
     def earnings_calendar(self):
         """ :reference: https://api.stocktwits.com/api/2/discover/earnings_calendar?date_from=&date_to=
             :allowed_param: 'date_from', 'date_to'
@@ -1182,42 +1222,46 @@ class API(object):
             require_auth=False
         )
 
-    def room(self, slug):
+    @property
+    def room(self):
         """ :reference: https://roomapi.stocktwits.com/room/api_test
             :allowed_param: 'slug'
         """
         return bind_api(
             api=self,
-            path='/room/{slug}'.format(slug=slug),
+            path='/room/{slug}',
             payload_type='room',
             allowed_param=['slug'],
             require_auth=True, rooms_api=True
         )
 
-    def room_role(self, slug):
+    @property
+    def room_role(self):
         """ :reference: https://roomapi.stocktwits.com/room/api_test/role
             :allowed_param: 'slug'
         """
         return bind_api(
             api=self,
-            path='/room/{slug}/role'.format(slug=slug),
+            path='/room/{slug}/role',
             payload_type='role',
             allowed_param=['slug'],
             require_auth=True, rooms_api=True
         )
 
-    def room_messages(self, slug):
+    @property
+    def room_messages(self):
         """ :reference: https://roomapi.stocktwits.com/room/api_test/messages?flat=1&limit=30&order=newest&until=
             :allowed_param: 'slug', 'flat', 'limit', 'order', 'until'
         """
         return bind_api(
             api=self,
-            path='/room/{slug}/messages?'.format(slug=slug),
+            path='/room/{slug}/messages',
             payload_type='room_messages',
             allowed_param=['slug', 'flat', 'limit', 'order', 'until'],
             require_auth=True, rooms_api=True
         )
 
+    @property
     def rooms(self):
         """ :reference: https://roomapi.stocktwits.com/rooms?role=any&limit=100
             :allowed_param: 'role', 'limit', 'filters'
@@ -1230,6 +1274,7 @@ class API(object):
             require_auth=True, rooms_api=True
         )
 
+    @property
     def room_topics(self):
         """ :reference: https://roomapi.stocktwits.com/topics
             :allowed_param:
@@ -1242,6 +1287,7 @@ class API(object):
             require_auth=False, rooms_api=True
         )
 
+    @property
     def featured_rooms(self):
         """ :reference: https://roomapi.stocktwits.com/rooms/featured
             :allowed_param:
@@ -1254,6 +1300,7 @@ class API(object):
             require_auth=False, rooms_api=True
         )
 
+    @property
     def room_status(self):
         """ :reference: https://roomapi.stocktwits.com/rooms/status
             :allowed_param:
@@ -1266,6 +1313,7 @@ class API(object):
             require_auth=False, rooms_api=True
         )
 
+    @property
     def conversations(self):
         """ :reference: https://api.stocktwits.com/api/2/direct_messages/conversations.json?filter=all
             :allowed_param: 'filter'
@@ -1278,42 +1326,46 @@ class API(object):
             require_auth=True
         )
 
-    def user_extended(self, user):
+    @property
+    def user_extended(self):
         """ :reference: https://api.stocktwits.com/api/2/users/Spekoliunas/extended.json
             :allowed_param: 'user'
         """
         return bind_api(
             api=self,
-            path='/users/{user}/extended.json'.format(user=user),
+            path='/users/{user}/extended.json',
             payload_type='user',
             allowed_param=['user'],
             require_auth=False
         )
 
-    def user_tooltip(self, user):
+    @property
+    def user_tooltip(self):
         """ :reference: https://api.stocktwits.com/api/2/users/mikepie/tooltip.json
             :allowed_param: 'user'
         """
         return bind_api(
             api=self,
-            path='/users/{user}/tooltip.json'.format(user=user),
+            path='/users/{user}/tooltip.json',
             payload_type='user',
             allowed_param=['user'],
             require_auth=False
         )
 
-    def stock_related(self, symbol):
+    @property
+    def stock_related(self):
         """ :reference: https://api.stocktwits.com/api/2/relations/AMC/stock_related_combined.json
             :allowed_param: 'symbol'
         """
         return bind_api(
             api=self,
-            path='/relations/{symbol}/stock_related_combined.json'.format(symbol=symbol),
+            path='/relations/{symbol}/stock_related_combined.json',
             payload_type='symbol',
             allowed_param=['symbol'],
             require_auth=False
         )
 
+    @property
     def global_announcement(self):
         """ :reference: https://api.stocktwits.com/api/2/global_announcement?platform=web
             :allowed_param: 'platform'
@@ -1326,6 +1378,7 @@ class API(object):
             require_auth=False
         )
 
+    @property
     def account_preferences(self):
         """ :reference: https://api.stocktwits.com/api/2/account/preferences.json
             :allowed_param:

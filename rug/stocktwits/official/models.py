@@ -80,54 +80,68 @@ class Model(object):
         return '%s(%s)' % (self.__class__.__name__, ', '.join(state))
 
 
-class Status(Model):
+class Message(Model):
 
     @classmethod
     def parse(cls, api, json):
-        status = cls(api)
-        setattr(status, '_json', json)
+        message = cls(api)
+        setattr(message, '_json', json)
         for k, v in json.items():
             if k == 'user':
                 user_model = getattr(api.parser.model_factory, 'user') if api else User
                 user = user_model.parse(api, v)
-                setattr(status, 'author', user)
-                setattr(status, 'user', user)  # DEPRECIATED
+                setattr(message, 'user', user)
             elif k == 'created_at':
-                setattr(status, k, parse_datetime(v))
-            elif k == 'source':
-                if '<' in v:
-                    setattr(status, k, parse_html_value(v))
-                    setattr(status, 'source_url', parse_a_href(v))
-                else:
-                    setattr(status, k, v)
-                    setattr(status, 'source_url', None)
-            elif k == 'retweeted_status':
-                setattr(status, k, Status.parse(api, v))
-            elif k == 'quoted_status':
-                setattr(status, k, Status.parse(api, v))
-            elif k == 'place':
-                if v is not None:
-                    setattr(status, k, Place.parse(api, v))
-                else:
-                    setattr(status, k, None)
+                setattr(message, k, parse_datetime(v))
+            elif k == 'source': # TODO: Create Source Model
+                source_model = getattr(api.parser.model_factory, 'source') if api else Source
+                source = source_model.parse(api, v)
+                setattr(message, 'source', source)
+            elif k == 'symbols': # TODO: Create Symbol Model
+                symbols_model = getattr(api.parser.model_factory, 'symbol') if api else Symbol
+                symbols = symbols_model.parse_list(api, v)
+                setattr(message, 'symbols', symbols)
+            elif k == 'entities': # TODO: Create Entity Model
+                entities_model = getattr(api.parser.model_factory, 'entity') if api else Entity
+                entities = entities_model.parse(api, v)
+                setattr(message, 'entities', entities)
+            elif k == 'conversation': # TODO: Create Conversation Model
+                conversation_model = getattr(api.parser.model_factory, 'conversation') if api else Conversation
+                conversation = conversation_model.parse(api, v)
+                setattr(message, 'conversation', conversation)
+            elif k == 'recipient': # TODO: Create Recipient Model
+                recipient_model = getattr(api.parser.model_factory, 'recipient') if api else Recipient
+                recipient = recipient_model.parse(api, v)
+                setattr(message, 'recipient', recipient)
             else:
-                setattr(status, k, v)
-        return status
+                setattr(message, k, v)
+        return message
 
-    def destroy(self):
-        return self._api.destroy_status(self.id)
+    @classmethod
+    def parse_list(cls, api, json_list):
+        if isinstance(json_list, list):
+            item_list = json_list
+        else:
+            item_list = json_list['messages']
+        results = ResultSet()
+        for obj in item_list:
+            results.append(cls.parse(api, obj))
+        return results
 
-    def retweet(self):
-        return self._api.retweet(self.id)
+    def create(self):
+        return self._api.create_message(self.id)
 
-    def retweets(self):
-        return self._api.retweets(self.id)
+    def show(self):
+        return self._api.show_message(self.id)
 
-    def favorite(self):
-        return self._api.create_favorite(self.id)
+    def like(self):
+        return self._api.like_message(self.id)
+
+    def unlike(self):
+        return self._api.unlike_message(self.id)
 
     def __eq__(self, other):
-        if isinstance(other, Status):
+        if isinstance(other, Message):
             return self.id == other.id
 
         return NotImplemented
@@ -151,7 +165,7 @@ class User(Model):
             if k == 'created_at':
                 setattr(user, k, parse_datetime(v))
             elif k == 'status':
-                setattr(user, k, Status.parse(api, v))
+                setattr(user, k, Message.parse(api, v))
             elif k == 'following':
                 # sets this to null if it is false
                 if v is True:
@@ -503,9 +517,8 @@ class ModelFactory(object):
     to add your own extended models.
     """
 
-    status = Status
     user = User
-    direct_message = DirectMessage
+    message = Message
     friendship = Friendship
     saved_search = SavedSearch
     search_results = SearchResults
