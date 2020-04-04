@@ -1,28 +1,31 @@
 USER:
-{
-  "response": {"status": 200},
   "user": {
-    "id": 176388,
-    "username": "stocktwits_dev",
-    "name": "New Name",
+    "id": 3,
+    "username": "zerobeta",
+    "name": "Justin Paterno",
     "avatar_url": "http://avatars.stocktwits.com/images/default_avatar_thumb.jpg",
     "avatar_url_ssl": "https://s3.amazonaws.com/st-avatars/images/default_avatar_thumb.jpg",
-    "identity": "User",
-    "classification": [],
-    "followers": 3,
-    "following": 3,
-    "ideas": 1,
-    "following_stocks": 3,
-    "bio": null,
-    "website_url": null,
+    "identity": "Official",
+    "classification": [
+      "ir"
+    ],
+    "followers": 0,
+    "following": 0,
+    "ideas": 0,
+    "following_stocks": 0,
+    "bio": "Product at Stocktwits",
+    "website_url": "http://justinpaterno.com",
     "trading_strategy": {
-      "assets_frequently_traded": [],
-      "approach": null,
-      "holding_period": null,
-      "experience": null
+      "assets_frequently_traded": [
+        "Equities",
+        "Options",
+        "Forex"
+      ],
+      "approach": "Growth",
+      "holding_period": "Position Trader",
+      "experience": "Intermediate"
     }
   }
-}
 
 SYMBOL:
 {

@@ -4,7 +4,7 @@
 
 from __future__ import absolute_import
 
-from rug.stocktwits.official.utils import parse_a_href, parse_datetime, parse_html_value
+from rug.stocktwits.official.utils import parse_datetime
 
 
 class ResultSet(list):
@@ -93,26 +93,30 @@ class Message(Model):
                 setattr(message, 'user', user)
             elif k == 'created_at':
                 setattr(message, k, parse_datetime(v))
-            elif k == 'source': # TODO: Create Source Model
+            elif k == 'source':
                 source_model = getattr(api.parser.model_factory, 'source') if api else Source
                 source = source_model.parse(api, v)
                 setattr(message, 'source', source)
-            elif k == 'symbols': # TODO: Create Symbol Model
+            elif k == 'symbols':
                 symbols_model = getattr(api.parser.model_factory, 'symbol') if api else Symbol
                 symbols = symbols_model.parse_list(api, v)
                 setattr(message, 'symbols', symbols)
-            elif k == 'entities': # TODO: Create Entity Model
+            elif k == 'entities':
                 entities_model = getattr(api.parser.model_factory, 'entity') if api else Entity
                 entities = entities_model.parse(api, v)
                 setattr(message, 'entities', entities)
-            elif k == 'conversation': # TODO: Create Conversation Model
+            elif k == 'conversation':
                 conversation_model = getattr(api.parser.model_factory, 'conversation') if api else Conversation
                 conversation = conversation_model.parse(api, v)
                 setattr(message, 'conversation', conversation)
-            elif k == 'recipient': # TODO: Create Recipient Model
+            elif k == 'recipient':
                 recipient_model = getattr(api.parser.model_factory, 'recipient') if api else Recipient
                 recipient = recipient_model.parse(api, v)
                 setattr(message, 'recipient', recipient)
+            elif k == 'parent':
+                parent_model = getattr(api.parser.model_factory, 'parent') if api else Parent
+                parent = parent_model.parse(api, v)
+                setattr(message, 'recipient', parent)
             else:
                 setattr(message, k, v)
         return message
@@ -162,18 +166,7 @@ class User(Model):
         user = cls(api)
         setattr(user, '_json', json)
         for k, v in json.items():
-            if k == 'created_at':
-                setattr(user, k, parse_datetime(v))
-            elif k == 'status':
-                setattr(user, k, Message.parse(api, v))
-            elif k == 'following':
-                # sets this to null if it is false
-                if v is True:
-                    setattr(user, k, True)
-                else:
-                    setattr(user, k, False)
-            else:
-                setattr(user, k, v)
+            setattr(user, k, v)
         return user
 
     @classmethod
@@ -188,42 +181,41 @@ class User(Model):
             results.append(cls.parse(api, obj))
         return results
 
-    def timeline(self, **kwargs):
-        return self._api.user_timeline(user_id=self.id, **kwargs)
-
-    def friends(self, **kwargs):
-        return self._api.friends(user_id=self.id, **kwargs)
+    def following(self, **kwargs):
+        return self._api.list_following(user_id=self.id, **kwargs)
 
     def followers(self, **kwargs):
-        return self._api.followers(user_id=self.id, **kwargs)
+        return self._api.list_followers(user_id=self.id, **kwargs)
+
+    def blocks(self, **kwargs):
+        return self._api.list_blocks(user_id=self.id, **kwargs)
+
+    def mutes(self, **kwargs):
+        return self._api.list_mutes(user_id=self.id, **kwargs)
+
+    def symbols(self, **kwargs):
+        return self._api.list_symbols(user_id=self.id, **kwargs)
 
     def follow(self):
         self._api.create_friendship(user_id=self.id)
-        self.following = True
 
     def unfollow(self):
         self._api.destroy_friendship(user_id=self.id)
-        self.following = False
 
-    def lists_memberships(self, *args, **kwargs):
-        return self._api.lists_memberships(user=self.screen_name,
-                                           *args,
-                                           **kwargs)
+    def block(self):
+        self._api.create_block(user_id=self.id)
 
-    def lists_subscriptions(self, *args, **kwargs):
-        return self._api.lists_subscriptions(user=self.screen_name,
-                                             *args,
-                                             **kwargs)
+    def unblock(self):
+        self._api.destroy_block(user_id=self.id)
 
-    def lists(self, *args, **kwargs):
-        return self._api.lists_all(user=self.screen_name,
-                                   *args,
-                                   **kwargs)
+    def mute(self):
+        self._api.create_mute(user_id=self.id)
 
-    def followers_ids(self, *args, **kwargs):
-        return self._api.followers_ids(user_id=self.id,
-                                       *args,
-                                       **kwargs)
+    def unmute(self):
+        self._api.destroy_mute(user_id=self.id)
+
+    def watchlists(self, **kwargs):
+        return self._api.list_watchlists(user_id=self.id, **kwargs)
 
     def __eq__(self, other):
         if isinstance(other, User):
@@ -240,32 +232,95 @@ class User(Model):
         return not result
 
 
-class DirectMessage(Model):
+class Source(Model):
 
     @classmethod
     def parse(cls, api, json):
-        dm = cls(api)
-        if "event" in json:
-            json = json["event"]
+        source = cls(api)
         for k, v in json.items():
-            setattr(dm, k, v)
-        return dm
+            setattr(source, k, v)
+        return source
+
+
+class Symbol(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        symbol = cls(api)
+        for k, v in json.items():
+            setattr(symbol, k, v)
+        return symbol
 
     @classmethod
     def parse_list(cls, api, json_list):
         if isinstance(json_list, list):
             item_list = json_list
         else:
-            item_list = json_list['events']
+            item_list = json_list['symbols']
 
         results = ResultSet()
         for obj in item_list:
             results.append(cls.parse(api, obj))
         return results
 
-    def destroy(self):
-        return self._api.destroy_direct_message(self.id)
+    def add_to_watchlist(self):
+        return self._api.add_to_watchlist(self.id)
 
+    def remove_from_watchlist(self):
+        return self._api.remove_from_watchlist(self.id)
+
+
+class Entity(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        entity = cls(api)
+        for k, v in json.items():
+            setattr(entity, k, v)
+        return entity
+
+
+class Parent(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        parent = cls(api)
+        for k, v in json.items():
+            if k == 'created_at':
+                setattr(parent, k, parse_datetime(v))
+            else:
+                setattr(parent, k, v)
+        return parent
+
+
+class Conversation(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        conversation = cls(api)
+        for k, v in json.items():
+            setattr(conversation, k, v)
+        return conversation
+
+
+class Recipient(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        recipient = cls(api)
+        for k, v in json.items():
+            setattr(recipient, k, v)
+        return recipient
+
+
+class Result(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        result = cls(api)
+        for k, v in json.items():
+            setattr(result, k, v)
+        return result
 
 class Friendship(Model):
 
@@ -288,134 +343,63 @@ class Friendship(Model):
         return source, target
 
 
-class SavedSearch(Model):
-
-    @classmethod
-    def parse(cls, api, json):
-        ss = cls(api)
-        for k, v in json.items():
-            if k == 'created_at':
-                setattr(ss, k, parse_datetime(v))
-            else:
-                setattr(ss, k, v)
-        return ss
-
-    def destroy(self):
-        return self._api.destroy_saved_search(self.id)
-
-
 class SearchResults(ResultSet):
 
     @classmethod
     def parse(cls, api, json):
-        metadata = json['search_metadata']
         results = SearchResults()
-        results.refresh_url = metadata.get('refresh_url')
-        results.completed_in = metadata.get('completed_in')
-        results.query = metadata.get('query')
-        results.count = metadata.get('count')
-        results.next_results = metadata.get('next_results')
-
-        status_model = getattr(api.parser.model_factory, 'status') if api else Status
-
-        for status in json['statuses']:
-            results.append(status_model.parse(api, status))
+        result_model = getattr(api.parser.model_factory, 'result') if api else Result
+        for result in json['results']:
+            results.append(result_model.parse(api, result))
         return results
 
 
-class List(Model):
+class Watchlist(Model):
 
     @classmethod
     def parse(cls, api, json):
-        lst = List(api)
-        setattr(lst, '_json', json)
+        watchlist = Watchlist(api)
+        setattr(watchlist, '_json', json)
         for k, v in json.items():
             if k == 'user':
-                setattr(lst, k, User.parse(api, v))
+                setattr(watchlist, k, User.parse(api, v))
             elif k == 'created_at':
-                setattr(lst, k, parse_datetime(v))
+                setattr(watchlist, k, parse_datetime(v))
+            elif k == 'updated_at':
+                setattr(watchlist, k, parse_datetime(v))
             else:
-                setattr(lst, k, v)
-        return lst
+                setattr(watchlist, k, v)
+        return watchlist
 
     @classmethod
     def parse_list(cls, api, json_list, result_set=None):
         results = ResultSet()
         if isinstance(json_list, dict):
-            json_list = json_list['lists']
+            json_list = json_list['watchlists']
         for obj in json_list:
             results.append(cls.parse(api, obj))
         return results
 
+    def create(self, **kwargs):
+        return self._api.create_watchlist(**kwargs)
+
     def update(self, **kwargs):
-        return self._api.update_list(self.slug, **kwargs)
+        return self._api.update_watchlist(self.id, **kwargs)
 
     def destroy(self):
-        return self._api.destroy_list(self.slug)
+        return self._api.destroy_watchlist(self.id)
 
-    def timeline(self, **kwargs):
-        return self._api.list_timeline(self.user.screen_name,
-                                       self.slug,
-                                       **kwargs)
+    def show(self):
+        return self._api.show_watchlist(self.id)
 
-    def add_member(self, id):
-        return self._api.add_list_member(self.slug, id)
+    def static(self):
+        return self._api.static_watchlist(self.id)
 
-    def remove_member(self, id):
-        return self._api.remove_list_member(self.slug, id)
+    def add_symbols(self, ids):
+        return self._api.add_to_watchlist(self.id, ids)
 
-    def members(self, **kwargs):
-        return self._api.list_members(self.user.screen_name,
-                                      self.slug,
-                                      **kwargs)
-
-    def is_member(self, id):
-        return self._api.is_list_member(self.user.screen_name,
-                                        self.slug,
-                                        id)
-
-    def subscribe(self):
-        return self._api.subscribe_list(self.user.screen_name, self.slug)
-
-    def unsubscribe(self):
-        return self._api.unsubscribe_list(self.user.screen_name, self.slug)
-
-    def subscribers(self, **kwargs):
-        return self._api.list_subscribers(self.user.screen_name,
-                                          self.slug,
-                                          **kwargs)
-
-    def is_subscribed(self, id):
-        return self._api.is_subscribed_list(self.user.screen_name,
-                                            self.slug,
-                                            id)
-
-
-class Relation(Model):
-    @classmethod
-    def parse(cls, api, json):
-        result = cls(api)
-        for k, v in json.items():
-            if k == 'value' and json['kind'] in ['Tweet', 'LookedupStatus']:
-                setattr(result, k, Status.parse(api, v))
-            elif k == 'results':
-                setattr(result, k, Relation.parse_list(api, v))
-            else:
-                setattr(result, k, v)
-        return result
-
-
-class Relationship(Model):
-    @classmethod
-    def parse(cls, api, json):
-        result = cls(api)
-        for k, v in json.items():
-            if k == 'connections':
-                setattr(result, 'is_following', 'following' in v)
-                setattr(result, 'is_followed_by', 'followed_by' in v)
-            else:
-                setattr(result, k, v)
-        return result
+    def remove_symbols(self, ids):
+        return self._api.remove_from_watchlist(self.id, ids)
 
 
 class JSONModel(Model):
@@ -435,71 +419,6 @@ class IDModel(Model):
             return json['ids']
 
 
-class BoundingBox(Model):
-
-    @classmethod
-    def parse(cls, api, json):
-        result = cls(api)
-        if json is not None:
-            for k, v in json.items():
-                setattr(result, k, v)
-        return result
-
-    def origin(self):
-        """
-        Return longitude, latitude of southwest (bottom, left) corner of
-        bounding box, as a tuple.
-
-        This assumes that bounding box is always a rectangle, which
-        appears to be the case at present.
-        """
-        return tuple(self.coordinates[0][0])
-
-    def corner(self):
-        """
-        Return longitude, latitude of northeast (top, right) corner of
-        bounding box, as a tuple.
-
-        This assumes that bounding box is always a rectangle, which
-        appears to be the case at present.
-        """
-        return tuple(self.coordinates[0][2])
-
-
-class Place(Model):
-
-    @classmethod
-    def parse(cls, api, json):
-        place = cls(api)
-        for k, v in json.items():
-            if k == 'bounding_box':
-                # bounding_box value may be null (None.)
-                # Example: "United States" (id=96683cc9126741d1)
-                if v is not None:
-                    t = BoundingBox.parse(api, v)
-                else:
-                    t = v
-                setattr(place, k, t)
-            elif k == 'contained_within':
-                # contained_within is a list of Places.
-                setattr(place, k, Place.parse_list(api, v))
-            else:
-                setattr(place, k, v)
-        return place
-
-    @classmethod
-    def parse_list(cls, api, json_list):
-        if isinstance(json_list, list):
-            item_list = json_list
-        else:
-            item_list = json_list['result']['places']
-
-        results = ResultSet()
-        for obj in item_list:
-            results.append(cls.parse(api, obj))
-        return results
-
-
 class Media(Model):
 
     @classmethod
@@ -510,6 +429,15 @@ class Media(Model):
         return media
 
 
+class Cursor(Model):
+
+    @classmethod
+    def parse(cls, api, json):
+        cursor = cls(api)
+        for k, v in json.items():
+            setattr(cursor, k, v)
+        return cursor
+
 class ModelFactory(object):
     """
     Used by parsers for creating instances
@@ -519,15 +447,15 @@ class ModelFactory(object):
 
     user = User
     message = Message
+    source = Source
+    symbol = Symbol
+    entity = Entity
+    conversation = Conversation
+    recipient = Recipient
+    result = Result
     friendship = Friendship
-    saved_search = SavedSearch
     search_results = SearchResults
-    list = List
-    relation = Relation
-    relationship = Relationship
+    watchlist = Watchlist
     media = Media
-
     json = JSONModel
     ids = IDModel
-    place = Place
-    bounding_box = BoundingBox
