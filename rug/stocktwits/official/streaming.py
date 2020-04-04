@@ -20,7 +20,7 @@ from requests.exceptions import Timeout
 
 from rug.stocktwits.official.api import API
 from rug.stocktwits.official.error import StocktwitError
-from rug.stocktwits.official.models import Status
+from rug.stocktwits.official.models import Message
 
 STREAM_VERSION = '1.1'
 
@@ -50,7 +50,7 @@ class StreamListener(object):
         data = json.loads(raw_data)
 
         if 'in_reply_to_status_id' in data:
-            status = Status.parse(self.api, data)
+            status = Message.parse(self.api, data)
             if self.on_status(status) is False:
                 return False
         elif 'delete' in data:
@@ -58,11 +58,11 @@ class StreamListener(object):
             if self.on_delete(delete['id'], delete['user_id']) is False:
                 return False
         elif 'event' in data:
-            status = Status.parse(self.api, data)
+            status = Message.parse(self.api, data)
             if self.on_event(status) is False:
                 return False
         elif 'direct_message' in data:
-            status = Status.parse(self.api, data)
+            status = Message.parse(self.api, data)
             if self.on_direct_message(status) is False:
                 return False
         elif 'friends' in data:

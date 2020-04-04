@@ -132,7 +132,6 @@ class IdIterator(BaseIterator):
 
         if len(result) == 0:
             raise StopIteration
-        # TODO: Make this not dependant on the parser making max_id and
         # since_id available
         self.max_id = model.max_id
         self.num_tweets += 1
@@ -181,8 +180,7 @@ class PageIterator(BaseIterator):
 
 class ItemIterator(BaseIterator):
 
-    def __init__(self, page_iterator, method, *args, **kwargs):
-        super().__init__(method, *args, **kwargs)
+    def __init__(self, page_iterator):
         self.page_iterator = page_iterator
         self.limit = 0
         self.current_page = None
