@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 
 class AuthHandler(object):
-    def apply_auth(self, url, method, headers, parameters):
+    def apply_auth(self):
         """Apply authentication headers to request"""
         raise NotImplementedError
     def get_username(self):
@@ -46,14 +46,15 @@ class WebAppAuthHandler(AuthHandler):
         self.access_token = self.user['access_token']
     def _get_oauth_url(self, endpoint):
         return 'https://' + self.OAUTH_HOST + self.OAUTH_ROOT + endpoint
-    def apply_auth(self, url, method, headers, parameters):
-        return OAuth2(self.consumer_key, token=self.user['access_token'])
+    def apply_auth(self):
+        token = {'access_token': self.user['access_token']}
+        return OAuth2(self.consumer_key, token=token)
     def get_username(self):
         if self.username is None:
             api = API(self)
-            user = api.verify_account()
-            if user:
-                self.username = user.screen_name
+            resp = api.verify_account()
+            if resp:
+                self.username = resp.user['username']
             else:
                 raise StocktwitError('Unable to get username,'
                                       ' invalid oauth token!')
@@ -76,7 +77,7 @@ class SignInAuthHandler(AuthHandler):
         self.authorization_response = None
         self.user = None
         self.username = None
-    def apply_auth(self, url, method, headers, parameters):
+    def apply_auth(self):
         return OAuth2(self.consumer_key, token=self.user['access_token'])
     def get_username(self):
         if self.username is None:

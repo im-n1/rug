@@ -91,7 +91,7 @@ def bind_api(**config):
             elif self.assets_api:
                 self.host = api.assets_host
             else:
-                self.host = api.api_host
+                self.host = api.host
             # Manually set Host header to fix an issue in python 2.5
             # or older where Host is set including the 443 port.
             # This causes Twitter to issue 301 redirect.
@@ -249,6 +249,10 @@ def bind_api(**config):
 
             # Parse the response payload
             self.return_cursors = self.return_cursors or 'cursor' in self.session.params
+            print("RESPONSE TEXT: " + resp.text)
+            print("SESSION PARAMS: " + str(self.session.params))
+            print("RETURN CURSORS: " + str(self.return_cursors))
+            print("PARSER: " + str(self.parser))
             result = self.parser.parse(self, resp.text, return_cursors=self.return_cursors)
 
             # Store result into cache if one is available.

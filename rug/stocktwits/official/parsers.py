@@ -43,20 +43,20 @@ class JSONParser(Parser):
 
     payload_format = 'json'
 
-    def parse(self, method, payload):
+    def parse(self, method, payload, return_cursors=False):
         try:
             json = json_lib.loads(payload)
         except Exception as e:
             raise StocktwitError('Failed to parse JSON payload: %s' % e)
 
-        needs_cursors = 'cursor' in method.session.params
-        if needs_cursors and isinstance(json, dict) \
-                and 'previous_cursor' in json \
-                and 'next_cursor' in json:
-            cursors = json['previous_cursor'], json['next_cursor']
-            return json, cursors
-        else:
-            return json
+        if return_cursors and isinstance(json, dict):
+            if 'next_cursor' in json:
+                if 'previous_cursor' in json:
+                    cursors = json['previous_cursor'], json['next_cursor']
+                    return json, cursors
+                else:
+                    return json, json['next_cursor']
+        return json
 
     def parse_error(self, payload):
         error_object = json_lib.loads(payload)
@@ -79,7 +79,7 @@ class ModelParser(JSONParser):
         JSONParser.__init__(self)
         self.model_factory = model_factory or ModelFactory
 
-    def parse(self, method, payload):
+    def parse(self, method, payload, return_cursors=False):
         try:
             if method.payload_type is None:
                 return
@@ -87,7 +87,7 @@ class ModelParser(JSONParser):
         except AttributeError:
             raise StocktwitError('No model for this payload type: %s' % method.payload_type)
 
-        json = JSONParser.parse(self, method, payload)
+        json = JSONParser.parse(self, method, payload, return_cursors=return_cursors)
         if isinstance(json, tuple):
             json, cursors = json
         else:

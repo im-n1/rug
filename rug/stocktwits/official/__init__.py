@@ -13,6 +13,8 @@ from rug.stocktwits.official.api import API
 from rug.stocktwits.official.auth import WebAppAuthHandler
 from rug.stocktwits.official.cursor import Cursor
 from rug.stocktwits.official.error import RateLimitError, StocktwitError
+from rug.stocktwits.official.models import Message, Symbol, ModelFactory, SearchResults, Watchlist, User
+from rug.stocktwits.official.streaming import Stream, StreamListener
 
 # Global, unauthenticated instance of API
 api = API()

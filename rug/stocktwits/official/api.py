@@ -526,7 +526,7 @@ class API(object):
 
     def me(self):
         """ Get the authenticated user """
-        return self.verify_account()['user']['username']
+        return self.search_users(q=self.auth.get_username())
 
     @property
     def search(self):
@@ -536,7 +536,7 @@ class API(object):
         return bind_api(
             api=self,
             path='/search.json',
-            payload_type='json', payload_list=True,
+            payload_type='search_results', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
         )
@@ -549,7 +549,7 @@ class API(object):
         return bind_api(
             api=self,
             path='/search/symbols.json',
-            payload_type='json', payload_list=True,
+            payload_type='search_results', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
         )
@@ -562,7 +562,7 @@ class API(object):
         return bind_api(
             api=self,
             path='/search/users.json',
-            payload_type='json', payload_list=True,
+            payload_type='search_results', payload_list=True,
             allowed_param=['q', 'callback'],
             require_auth=False
         )
@@ -925,7 +925,7 @@ class API(object):
             require_auth=True
         )
 
-    def verify_account(self):
+    def verify_account(self, **kwargs):
         """ :reference: https://api.stocktwits.com/developers/docs/api#account-verify-docs
             :allowed_param: 'callback'
         """
@@ -936,7 +936,7 @@ class API(object):
                 payload_type='user',
                 require_auth=True,
                 allowed_param=['callback']
-            )
+            )(**kwargs)
         except StocktwitError as e:
             if e.response is not None and e.response.status_code == 401:
                 return False

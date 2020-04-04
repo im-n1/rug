@@ -346,11 +346,15 @@ class Friendship(Model):
 class SearchResults(ResultSet):
 
     @classmethod
-    def parse(cls, api, json):
-        results = SearchResults()
+    def parse_list(cls, api, json_list):
+        if isinstance(json_list, list):
+            item_list = json_list
+        else:
+            item_list = json_list['results']
+        results = ResultSet()
         result_model = getattr(api.parser.model_factory, 'result') if api else Result
-        for result in json['results']:
-            results.append(result_model.parse(api, result))
+        for obj in item_list:
+            results.append(result_model.parse(api, obj))
         return results
 
 
