@@ -6,6 +6,6 @@ certainly provides more data. There are also no limits.
 
 Following methods are provided:
 
-.. autoclass:: rug.stocktwits.UnofficialAPI
+.. autoclass:: rug.tipranks.UnofficialAPI
    :members:
 

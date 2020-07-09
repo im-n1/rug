@@ -1,7 +1,10 @@
 Rug documentation
 =================
 
+TipRanks.com
+------------
+
 .. toctree::
    :maxdepth: 2
 
-   stocktwits/unofficial_api
+   tipranks/unofficial_api
