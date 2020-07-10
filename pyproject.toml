@@ -1,8 +1,20 @@
 [tool.poetry]
 name = "rug"
 version = "0.1.0"
-description = ""
+description = "Library for fetching various stock data from the internet (official and unofficial APIs)."
 authors = ["Pavel Hrdina, Patrick Roach"]
+classifiers = [
+    "Programming Language :: Python :: 3.6",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+readme = "README.md"
+documentation = "https://rug.readthedocs.io/en/latest/"
+homepage = "https://github.com/im-n1/rug"
+repository = "https://github.com/im-n1/rug"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.7"
