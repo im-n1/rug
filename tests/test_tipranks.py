@@ -1,5 +1,6 @@
 import sys
 import os
+import datetime
 
 sys.path.insert(0, os.path.abspath("../rug"))
 
@@ -20,6 +21,9 @@ def test_get_dividends():
         "receive_date",
         "growth_since",
     ]
+    assert isinstance(dividends[0]["payment_date"], datetime.date)
+    assert isinstance(dividends[0]["ex_date"], datetime.date)
+    assert isinstance(dividends[0]["receive_date"], datetime.date)
 
 
 def test_year_highs_and_lows():

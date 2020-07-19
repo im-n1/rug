@@ -1,5 +1,6 @@
 import asyncio
 import time
+from datetime import datetime
 
 import httpx
 
@@ -72,9 +73,15 @@ class UnofficialAPI(BaseAPI):
                 {
                     "yield": item["yield"],
                     "sector_average_yield": item["sectorYield"],
-                    "payment_date": item["payDate"],
-                    "ex_date": item["exDate"],
-                    "receive_date": item["recDate"],
+                    "payment_date": datetime.strptime(
+                        item["payDate"], "%Y-%m-%dT%H:%M:%S"
+                    ).date(),
+                    "ex_date": datetime.strptime(
+                        item["exDate"], "%Y-%m-%dT%H:%M:%S"
+                    ).date(),
+                    "receive_date": datetime.strptime(
+                        item["recDate"], "%Y-%m-%dT%H:%M:%S"
+                    ).date(),
                     "growth_since": item["growthSinceDate"],
                 }
             )
