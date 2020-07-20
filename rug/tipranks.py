@@ -54,6 +54,7 @@ class UnofficialAPI(BaseAPI):
         Fetches symbol dividends with following fields:
 
         * yield
+        * amount
         * sector_average_yield
         * payment_date
         * ex_date
