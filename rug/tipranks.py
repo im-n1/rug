@@ -24,9 +24,12 @@ class BaseAPI:
 
         async with httpx.AsyncClient() as client:
 
-            response = await client.get(*args)
-
-            return response.json()
+            try:
+                return await client.get(*args)
+            except Exception as exc:
+                raise HttpException(
+                    f"Couldn't perform GET request with args {args}"
+                ) from exc
 
 
 class UnofficialAPI(BaseAPI):
@@ -279,25 +282,23 @@ class UnofficialAPI(BaseAPI):
             }
             """
 
-            async with httpx.AsyncClient() as client:
+            data = await self._aget(
+                f"https://www.tipranks.com/api/stocks/getData/?name={symbol}"
+            )
+            json_data = data.json()
 
-                start = time.time()
-                json_data = await self._aget(
-                    f"https://www.tipranks.com/api/stocks/getData/?name={symbol}"
-                )
-
-                return {
-                    "company_name": json_data["companyName"],
-                    "market": json_data["market"],
-                    "description": json_data["description"],
-                    "market_cap": int(json_data["marketCap"]),
-                    "has_dividends": bool(json_data["hasDividends"]),
-                    "similar_stocks": [
-                        {"ticker": stock["ticker"], "company_name": stock["name"]}
-                        for stock in json_data["similarStocks"]
-                    ],
-                    "yoy_change": float(json_data["momentum"]["momentum"]) * 100,
-                }
+            return {
+                "company_name": json_data["companyName"],
+                "market": json_data["market"],
+                "description": json_data["description"],
+                "market_cap": int(json_data["marketCap"]),
+                "has_dividends": bool(json_data["hasDividends"]),
+                "similar_stocks": [
+                    {"ticker": stock["ticker"], "company_name": stock["name"]}
+                    for stock in json_data["similarStocks"]
+                ],
+                "yoy_change": float(json_data["momentum"]["momentum"]) * 100,
+            }
 
         async def download_additionals(symbol):
             """
@@ -313,18 +314,17 @@ class UnofficialAPI(BaseAPI):
             :rtype: dict
             """
 
-            async with httpx.AsyncClient() as client:
+            data = await self._aget(
+                f"https://market.tipranks.com/api/details/GetRealTimeQuotes/?tickers={symbol}"
+            )
+            json_data = data.json()
 
-                json_data = await self._aget(
-                    f"https://market.tipranks.com/api/details/GetRealTimeQuotes/?tickers={symbol}"
-                )
-
-                return {
-                    "year_low": json_data[0]["yLow"],
-                    "year_high": json_data[0]["yHigh"],
-                    "pe_ratio": json_data[0]["pe"],
-                    "eps": json_data[0]["eps"],
-                }
+            return {
+                "year_low": json_data[0]["yLow"],
+                "year_high": json_data[0]["yHigh"],
+                "pe_ratio": json_data[0]["pe"],
+                "eps": json_data[0]["eps"],
+            }
 
         async def main():
 
