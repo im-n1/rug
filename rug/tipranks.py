@@ -75,6 +75,7 @@ class UnofficialAPI(BaseAPI):
             dividends.append(
                 {
                     "yield": item["yield"],
+                    "amount": item["amount"],
                     "sector_average_yield": item["sectorYield"],
                     "payment_date": datetime.strptime(
                         item["payDate"], "%Y-%m-%dT%H:%M:%S"

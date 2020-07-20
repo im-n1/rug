@@ -5,6 +5,9 @@
 
 ## Changelog
 
+### 0.1.2
+* `get_dividends()` now returns dividend `amount` too
+
 ### 0.1.1
 * dates are now `datetime.date` instance
 

@@ -15,6 +15,7 @@ def test_get_dividends():
     assert isinstance(dividends, list)
     assert list(dividends[0].keys()) == [
         "yield",
+        "amount",
         "sector_average_yield",
         "payment_date",
         "ex_date",
