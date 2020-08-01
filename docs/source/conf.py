@@ -49,7 +49,9 @@ exclude_patterns = []
 #
 html_theme = "alabaster"
 
-html_sidebars = {"**": ["searchbox.html", "localtoc.html", "relations.html"]}
+html_sidebars = {
+    "**": ["localtoc.html", "searchbox.html", "globaltoc.html", "relations.html"]
+}
 
 pygments_style = "default"
 

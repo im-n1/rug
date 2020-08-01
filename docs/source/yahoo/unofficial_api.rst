@@ -7,6 +7,6 @@ requests per certain period.
 
 Following methods are provided:
 
-.. autoclass:: rug.tipranks.UnofficialAPI
+.. autoclass:: rug.yahoo.UnofficialAPI
    :members:
 

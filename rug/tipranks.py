@@ -2,34 +2,7 @@ import asyncio
 import time
 from datetime import datetime
 
-import httpx
-
-from .exceptions import HttpException
-
-
-class BaseAPI:
-    def _get(self, *args):
-        """
-        TBD
-        """
-
-        try:
-            return httpx.get(*args)
-        except Exception as exc:
-            raise HttpException(
-                f"Couldn't perform GET request with args {args}"
-            ) from exc
-
-    async def _aget(self, *args):
-
-        async with httpx.AsyncClient() as client:
-
-            try:
-                return await client.get(*args)
-            except Exception as exc:
-                raise HttpException(
-                    f"Couldn't perform GET request with args {args}"
-                ) from exc
+from . import BaseAPI
 
 
 class UnofficialAPI(BaseAPI):
@@ -39,15 +12,6 @@ class UnofficialAPI(BaseAPI):
     and provides data that official API doesn't. Also doesn't
     need an authorization.
     """
-
-    def __init__(self, symbol):
-        """
-        Constructor.
-
-        :param str symbol: Symbol of te item we wanna get info about.
-        """
-
-        self.symbol = str(symbol)
 
     def get_dividends(self):
         """
