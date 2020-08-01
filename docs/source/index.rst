@@ -16,3 +16,11 @@ YAHOO.com
     :maxdepth: 2
 
     yahoo/unofficial_api
+
+StockTwits.com
+--------------
+
+.. toctree::
+    :maxdepth: 2
+
+    stocktwits/unofficial_api

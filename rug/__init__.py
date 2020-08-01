@@ -7,14 +7,15 @@ class BaseAPI:
 
     timeout = 10
 
-    def __init__(self, symbol):
+    def __init__(self, symbol=None):
         """
         Constructor.
 
         :param str symbol: Symbol of te item we wanna get info about.
         """
 
-        self.symbol = str(symbol)
+        if symbol:
+            self.symbol = str(symbol)
 
     def _get(self, *args):
         """
