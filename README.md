@@ -10,6 +10,10 @@ APIs - no limits, more free data.
 
 ## Changelog
 
+### 0.2.2
+
+* Minor fixes.
+
 ### 0.2.1
 
 Method `rug.yahoo.UnofficialAPI.get_current_price()` returns market state now.
