@@ -12,7 +12,13 @@ def test_get_current_price():
     prices = api.get_current_price()
 
     assert isinstance(prices, dict)
-    assert list(prices.keys()) == ["pre_market", "current_market", "post_market"]
+    assert list(prices.keys()) == [
+        "state",
+        "pre_market",
+        "current_market",
+        "post_market",
+    ]
+    assert prices["state"] in ("pre-market", "post-market", "state")
     assert list(prices["pre_market"].keys()) == ["change", "value"]
     assert list(prices["pre_market"]["change"].keys()) == ["percents", "value"]
     assert list(prices["current_market"].keys()) == ["change", "value"]

@@ -60,6 +60,22 @@ class UnofficialAPI(BaseAPI):
         :rtype: dict
         """
 
+        def parse_state(state):
+
+            # No state at all.
+            if not state:
+                return None
+
+            state = state.lower()
+
+            if state.startswith("pre"):
+                return "pre-market"
+
+            if state.startswith("post"):
+                return "post-market"
+
+            return "open"
+
         response = self._get(
             f"https://query1.finance.yahoo.com/v11/finance/quoteSummary/{self.symbol}?modules=price"
         )
@@ -67,11 +83,7 @@ class UnofficialAPI(BaseAPI):
         data = data["quoteSummary"]["result"][0]["price"]
 
         return {
-            "state": {
-                "PREPRE": "pre-market",
-                "REGULAR": "open",
-                "POSTPOST": "post-market",
-            }[data.get("marketState")],
+            "state": parse_state(data.get("marketState")),
             "pre_market": {
                 "change": {
                     "percents": float(
