@@ -9,4 +9,3 @@ Following methods are provided:
 
 .. autoclass:: rug.stocktwits.UnofficialAPI
    :members:
-

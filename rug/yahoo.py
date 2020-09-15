@@ -5,10 +5,12 @@ class UnofficialAPI(BaseAPI):
     def get_current_price(self):
         """
         Fetches current market price inc. pre/post market
-        prices/percent/value changes.
+        prices/percent/value changes. Also returns current
+        market state (pre-market, open, post-market).
 
         Fetched stucture has following fields:
 
+        * state (pre-market, open, post-market)
         * pre_market
             * change
                 * percents
@@ -30,6 +32,7 @@ class UnofficialAPI(BaseAPI):
         .. code-block:: python
 
             {
+                "state": "CLOSED",
                 "pre_market": {
                     "change": {
                         "percents": -1.32476,
@@ -64,6 +67,11 @@ class UnofficialAPI(BaseAPI):
         data = data["quoteSummary"]["result"][0]["price"]
 
         return {
+            "state": {
+                "PREPRE": "pre-market",
+                "REGULAR": "open",
+                "POSTPOST": "post-market",
+            }[data.get("marketState")],
             "pre_market": {
                 "change": {
                     "percents": float(

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rug"
-version = "0.2"
+version = "0.2.1"
 description = "Library for fetching various stock data from the internet (official and unofficial APIs)."
 authors = ["Pavel Hrdina, Patrick Roach"]
 classifiers = [
