@@ -32,7 +32,7 @@ class UnofficialAPI(BaseAPI):
         .. code-block:: python
 
             {
-                "state": "CLOSED",
+                "state": "open",
                 "pre_market": {
                     "change": {
                         "percents": -1.32476,
